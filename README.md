@@ -9,7 +9,7 @@ Pandas added `register_series_accessor` and `register_dataframe_accessor` decora
 in 0.23. These extensions allow you to easily add new accessors to Pandas objects that
 are persistent. This means, you can easily write your own flavor of the DataFrame.
 
-To see an example, checkout [pdvega](). This library adds a new Vega plotting accessor
+To see an example, checkout [pdvega](https://github.com/jakevdp/pdvega). This library adds a new Vega plotting accessor
 under the `vgplot` attribute and mirror the `plot` (matplotlib-based) accessor.
 
 **Pandas Flavor** takes this extension module a step further and adds similar syntax
