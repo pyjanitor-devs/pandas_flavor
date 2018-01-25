@@ -1,5 +1,5 @@
 # Pandas Flavor
-**Flavor Pandas objects with your own methods and accessors.**
+**Easily write your own flavor of the DataFrame**
 
 Easily register new methods and accessors with Pandas objects.
 
