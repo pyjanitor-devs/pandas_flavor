@@ -6,21 +6,17 @@ This package adds support for registering methods as well.
 
 *What does this mean?*
 
-It's super easy to custom functionality to Pandas DataFrames and Series. Import
-this package. Write simple python function. Register it using one of the following
-decorators.
+It's super easy to custom functionality to Pandas DataFrames and Series.
+
+Import this package. Write a simple python function. Register the function using one of the following decorators.
 
 *Why?*
 
-Pandas is super handy. It's general purpose is to be a "flexible and powerful data analysis / manipulation library". With this API, you can tailor pandas to fit a specific
-field or use case.
+Pandas is super handy. Its general purpose is to be a "flexible and powerful data analysis/manipulation library".
 
-Maybe you want to a DataFrame that loads your specific data (and checks if the file
-  contains unwanted columns)?
+**Pandas Flavor** allows you to tailor Pandas to specific fields or use cases.
 
-Maybe you want custom plot functions?
-
-Maybe something else?
+Maybe you want to add new write methods to the Pandas DataFrame? Maybe you want custom plot functionality? Maybe something else?
 
 ## Register accessors
 
