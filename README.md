@@ -32,9 +32,14 @@ import pandas as pd
 import pandas_flavor as pf
 
 @pf.register_dataframe_accessor('my_flavor')
-def is_cool(df):
-    """Is my accessor cool?"""
-    return True
+class MyFlavor(object):
+
+  def __init__(self, data):
+    self._data
+
+  def is_cool(self):
+      """Is my accessor cool?"""
+      return True
 
 # DataFrame.
 df = DataFrame()
