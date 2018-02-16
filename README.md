@@ -65,9 +65,6 @@ print(df)
 # Access this functionality
 df.my_flavor.row_by_value('x', 10)
 
-# Access this functionality
-df.row_by_value('x', 10)
-
 # x    10
 # y     0
 # Name: 0, dtype: int64
