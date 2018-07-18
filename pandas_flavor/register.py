@@ -19,7 +19,7 @@ def register_dataframe_method(method):
     def inner(*args, **kwargs):
 
         class AccessorMethod(object):
-            
+
 
             def __init__(self, pandas_obj):
                 self._obj = pandas_obj
@@ -29,6 +29,8 @@ def register_dataframe_method(method):
                 return method(self._obj, *args, **kwargs)
 
         register_dataframe_accessor(method.__name__)(AccessorMethod)
+
+        return method
 
     return inner()
 
@@ -49,5 +51,7 @@ def register_series_method(method):
                 return method(self._obj, *args, **kwargs)
 
         register_series_accessor(method.__name__)(AccessorMethod)
+
+        return method
 
     return inner()
