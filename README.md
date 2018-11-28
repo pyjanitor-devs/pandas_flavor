@@ -70,8 +70,8 @@ df.my_flavor.row_by_value('x', 10)
 # Name: 0, dtype: int64
 ```
 
-To see this in action, check out [pdvega](https://github.com/jakevdp/pdvega) and
-[PhyloPandas](https://github.com/Zsailer/phylopandas)!
+To see this in action, check out [pdvega](https://github.com/jakevdp/pdvega),
+[PhyloPandas](https://github.com/Zsailer/phylopandas), and [pyjanitor](https://github.com/ericmjl/pyjanitor)!
 
 
 ## Register methods
