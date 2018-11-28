@@ -112,3 +112,10 @@ df.row_by_value('x', 10)
 # y     0
 # Name: 0, dtype: int64
 ```
+
+## Available Methods
+
+- **register_dataframe_method**: register a method directly with a pandas DataFrame.
+- **register_dataframe_accessor**: register an accessor (and it's methods) with a pandas DataFrame.
+- **register_series_method**: register a methods directly with a pandas Series.
+- **register_series_accessor**: register an accessor (and it's methods) with a pandas Series.
