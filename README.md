@@ -121,8 +121,6 @@ df.row_by_value('x', 10)
 - **register_series_method**: register a methods directly with a pandas Series.
 - **register_series_accessor**: register an accessor (and it's methods) with a pandas Series.
 
-
-
 ## Installation
 
 You can install using **pip**:
@@ -133,6 +131,12 @@ or conda (thanks @ericmjl)!
 ```
 conda install -c conda-forge pandas-flavor
 ```
+
+## Contributing
+
+Pull requests are always welcome! If you find a bug, don't hestitate to open an issue or submit a PR. If you're not sure how to do that, check out this [simple guide](https://github.com/Zsailer/guide-to-working-as-team-on-github).
+
+If you have a feature request, please open an issue or submit a PR!
 
 ## TL;DR
 
@@ -147,9 +151,3 @@ Pandas Flavor originated as a library to backport these decorators to older vers
 When you register a method, Pandas flavor actually creates and registers a (this is subtle, but important) **custom accessor class that mimics** the behavior of a method by:
 1. inheriting the docstring of your function
 2. overriding the `__call__` method to call your function.
-
-## Contributing
-
-Pull requests are always welcome! If you find a bug, don't hestitate to open an issue or submit a PR. If you're not sure how to do that, check out this [simple guide](https://github.com/Zsailer/guide-to-working-as-team-on-github).
-
-If you have a feature request, please open an issue or submit a PR!
