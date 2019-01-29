@@ -1,10 +1,11 @@
 # Pandas Flavor
 **The easy way to write your own flavor of Pandas**
 
-Pandas added an new (simple) API to register accessors with Pandas objects.
-This package does two things:
-1. adds support for registering methods as well.
-2. makes each of these functions backwards compatible with older versions of Pandas.
+Pandas 0.23 added a (simple) API for registering accessors with Pandas objects.
+
+Pandas-flavor extends Pandas' extension API by:
+1. adding support for registering methods as well.
+2. making each of these functions backwards compatible with older versions of Pandas.
 
 ***What does this mean?***
 
@@ -119,3 +120,36 @@ df.row_by_value('x', 10)
 - **register_dataframe_accessor**: register an accessor (and it's methods) with a pandas DataFrame.
 - **register_series_method**: register a methods directly with a pandas Series.
 - **register_series_accessor**: register an accessor (and it's methods) with a pandas Series.
+
+
+
+## Installation
+
+You can install using **pip**:
+```
+pip install pandas_flavor
+```
+or conda (thanks @ericmjl)!
+```
+conda install -c conda-forge pandas-flavor
+```
+
+## TL;DR
+
+Pandas 0.23 introduced a simpler API for [extending Pandas](https://pandas.pydata.org/pandas-docs/stable/development/extending.html#extending-pandas). This API provided two key decorators, `register_dataframe_accessor` and `register_series_accessor`, that enable users to register **accessors** with Pandas DataFrames and Series. 
+
+Pandas Flavor originated as a library to backport these decorators to older versions of Pandas (<0.23). While doing the backporting, it became clear that registering **methods** directly to Pandas objects might be a desired feature as well.[*](#footnote) 
+
+<a name="footnote">*</a>*It is likely that Pandas deliberately chose not implement to this feature. If everyone starts monkeypatching DataFrames with their custom methods, it could lead to confusion in the Pandas community. The preferred Pandas approach is to namespace your methods by registering an accessor that contains your custom methods.* 
+
+**So how does method registration work?**
+
+When you register a method, Pandas flavor actually creates and registers a (this is subtle, but important) **custom accessor class that mimics** the behavior of a method by:
+1. inheriting the docstring of your function
+2. overriding the `__call__` method to call your function.
+
+## Contributing
+
+Pull requests are always welcome! If you find a bug, don't hestitate to open an issue or submit a PR. If you're not sure how to do that, check out this [simple guide](https://github.com/Zsailer/guide-to-working-as-team-on-github).
+
+If you have a feature request, please open an issue or submit a PR!
