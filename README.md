@@ -30,7 +30,10 @@ accessor that provides plotting functionality.
 Add an accessor by registering the function with the following decorator
 and passing the decorator an accessor name.
 
+
 ```python
+# my_flavor.py
+
 import pandas as pd
 import pandas_flavor as pf
 
@@ -48,6 +51,7 @@ class MyFlavor(object):
 
 Every dataframe now has this accessor as an attribute.
 ```python
+import my_flavor
 
 # DataFrame.
 df = DataFrame(data={
@@ -81,6 +85,8 @@ Using this package, you can attach functions directly to Pandas objects. No
 intermediate accessor is needed.
 
 ```python
+# my_flavor.py
+
 import pandas as pd
 import pandas_flavor as pf
 
@@ -92,6 +98,8 @@ def row_by_value(df, col, value):
 ```
 
 ```python
+import my_flavor
+
 # DataFrame.
 df = DataFrame(data={
   "x": [10, 20, 25],
