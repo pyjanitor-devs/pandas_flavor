@@ -19,7 +19,7 @@ EMAIL = 'zachsailer@gmail.com'
 AUTHOR = 'Zach Sailer'
 
 # What packages are required for this module to be executed?
-REQUIRED = ["pandas"]
+REQUIRED = ["pandas","xarray"]
 
 # The rest you shouldn't have to touch too much :)
 # ------------------------------------------------
@@ -82,12 +82,6 @@ setup(
     author_email=EMAIL,
     url=URL,
     packages=find_packages(exclude=('tests',)),
-    # If your package is a single module, use this instead of 'packages':
-    # py_modules=['mypackage'],
-
-    # entry_points={
-    #     'console_scripts': ['mycli=mymodule:cli'],
-    # },
     install_requires=REQUIRED,
     include_package_data=True,
     license='MIT',
