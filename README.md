@@ -54,7 +54,7 @@ Every dataframe now has this accessor as an attribute.
 import my_flavor
 
 # DataFrame.
-df = DataFrame(data={
+df = pd.DataFrame(data={
   "x": [10, 20, 25],
   "y": [0, 2, 5]
 })
