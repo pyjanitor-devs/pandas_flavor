@@ -1,7 +1,9 @@
 try:
     # Import register decorators from pandas >= 0.23
-    from pandas.api.extensions import (register_dataframe_accessor,
-                                       register_series_accessor)
+    from pandas.api.extensions import (
+        register_dataframe_accessor,
+        register_series_accessor
+    )
 except ImportError:
     from pandas import DataFrame, Series
 
