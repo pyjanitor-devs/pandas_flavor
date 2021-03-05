@@ -95,6 +95,12 @@ def row_by_value(df, col, value):
     """Slice out row from DataFrame by a value."""
     return df[df[col] == value].squeeze()
 
+# register_series_or_dataframe_method can optionally include arguments to pass to pd.DataFrame.apply()
+@pf.register_series_or_dataframe_method(axis=1)
+def total_diff(col, start_idx=0, end_idx=-1):
+  """ Return difference between the last and the first values per row/column"""
+  return col.iloc[end_idx] - col.iloc[start_idx]
+
 ```
 
 ```python
@@ -120,14 +126,30 @@ df.row_by_value('x', 10)
 # x    10
 # y     0
 # Name: 0, dtype: int64
+
+df2.total_diff()
+
+# 0   -10
+# 1   -18
+# 2   -20
+# dtype: int64
+
+# It is possible to override the decorator kwargs from the function call
+df.total_diff(axis=0, end_idx=-2)
+
+# x    10
+# y     2
+# dtype: int64
+
 ```
 
 ## Available Methods
 
 - **register_dataframe_method**: register a method directly with a pandas DataFrame.
 - **register_dataframe_accessor**: register an accessor (and it's methods) with a pandas DataFrame.
-- **register_series_method**: register a methods directly with a pandas Series.
+- **register_series_method**: register a method directly with a pandas Series.
 - **register_series_accessor**: register an accessor (and it's methods) with a pandas Series.
+- **register_series_or_dataframe_method**: register a method directly with both pandas Series and DataFrames.
 
 ## Installation
 
