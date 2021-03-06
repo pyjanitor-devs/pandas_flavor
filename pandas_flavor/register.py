@@ -57,7 +57,7 @@ def register_series_method(method):
     return inner()
 
 
-def register_series_or_dataframe_method(_func=None, **decorator_kwargs):
+def register_series_and_dataframe_method(_func=None, **decorator_kwargs):
     """Register a function as a method attached to the Pandas Series or DataFrame
     Method should be written as a function to apply on each column or each row
 
