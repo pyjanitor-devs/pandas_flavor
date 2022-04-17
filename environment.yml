@@ -6,5 +6,7 @@ dependencies:
   - pandas>=0.23
   - xarray
   - pip
+  - pre-commit
+  - pytest
   - pip:
       - lazy-loader
