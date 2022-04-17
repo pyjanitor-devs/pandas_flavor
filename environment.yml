@@ -1,0 +1,14 @@
+name: pandas-flavor
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pandas>=0.23
+  - xarray
+  - pip
+  - pre-commit
+  - pytest
+  - black
+  - pip:
+      - lazy-loader
+      - tuna

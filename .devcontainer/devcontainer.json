@@ -1,0 +1,46 @@
+// For format details, see https://aka.ms/vscode-remote/devcontainer.json or this file's README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.117.1/containers/python-3-miniconda
+{
+    "name": "pandas-flavor dev container",
+    // "context": "..",
+    // "image": "registry.hub.docker.com/ericmjl/pyjanitor:devcontainer",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    // Set *default* container specific settings.json values on container create.
+    "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "python.defaultInterpreterPath": "/opt/conda/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": true,
+        "python.linting.pylintPath": "/opt/conda/bin/pylint",
+        "python.formatting.provider": "black",
+        "python.formatting.blackArgs": [
+            "--config",
+            "pyproject.toml",
+        ],
+        "editor.formatOnSave": true,
+        "files.insertFinalNewline": true,
+        "files.trimFinalNewlines": true,
+        "files.trimTrailingWhitespace": true,
+        "[python]": {
+            "editor.formatOnSaveMode": "file",
+        },
+    },
+    // Add the IDs of extensions you want installed when the container is created.
+    "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-vsliveshare.vsliveshare-pack",
+        "arcticicestudio.nord-visual-studio-code"
+    ],
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    "forwardPorts": [
+        8000
+    ],
+    // Use 'postCreateCommand' to run commands after the container is created.
+    "postCreateCommand": "pre-commit install --install-hooks && python setup.py develop"
+    // Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
+    // "remoteUser": "vscode"
+}
