@@ -1,6 +1,3 @@
-
-import xarray as xr
-
 from xarray import register_dataarray_accessor, register_dataset_accessor
 from functools import wraps
 
@@ -36,4 +33,3 @@ def register_xarray_dataset_method(method: callable):
     register_dataset_accessor(method.__name__)(accessor_wrapper)
 
     return method
-
