@@ -11,3 +11,4 @@ dependencies:
   - black
   - pip:
       - lazy-loader
+      - tuna
