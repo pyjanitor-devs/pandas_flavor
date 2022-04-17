@@ -1,0 +1,10 @@
+name: pandas-flavor
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pandas>=0.23
+  - xarray
+  - pip
+  - pip:
+      - lazy-loader
