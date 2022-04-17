@@ -8,5 +8,6 @@ dependencies:
   - pip
   - pre-commit
   - pytest
+  - black
   - pip:
       - lazy-loader
