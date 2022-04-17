@@ -1,6 +1,5 @@
 from functools import wraps
-from .pandas_internals import (register_series_accessor,
-                              register_dataframe_accessor)
+from from pandas.api.extensions import register_series_accessor, register_dataframe_accessor
 
 
 def register_dataframe_method(method):
@@ -16,11 +15,9 @@ def register_dataframe_method(method):
             '''Print the dataframe column given'''
             print(df[col])
     """
+
     def inner(*args, **kwargs):
-
         class AccessorMethod(object):
-
-
             def __init__(self, pandas_obj):
                 self._obj = pandas_obj
 
@@ -36,10 +33,9 @@ def register_dataframe_method(method):
 
 
 def register_series_method(method):
-    """Register a function as a method attached to the Pandas Series.
-    """
-    def inner(*args, **kwargs):
+    """Register a function as a method attached to the Pandas Series."""
 
+    def inner(*args, **kwargs):
         class AccessorMethod(object):
             __doc__ = method.__doc__
 
