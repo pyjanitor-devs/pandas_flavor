@@ -1,3 +1,4 @@
+"""Top-level API for pandas-flavor."""
 from .register import (
     register_series_method,
     register_series_accessor,
