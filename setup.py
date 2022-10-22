@@ -19,7 +19,7 @@ EMAIL = "zachsailer@gmail.com"
 AUTHOR = "Zach Sailer"
 
 # What packages are required for this module to be executed?
-REQUIRED = ["pandas>=0.23", "xarray", "lazy-loader==0.1rc3"]
+REQUIRED = ["pandas>=0.23", "xarray", "lazy-loader>=0.1"]
 
 # The rest you shouldn't have to touch too much :)
 # ------------------------------------------------
