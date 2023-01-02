@@ -1,6 +1,8 @@
 from functools import wraps
 from pandas.api.extensions import register_series_accessor, register_dataframe_accessor
+from . import stack_counter
 
+handle_pandas_method_call = None
 
 def register_dataframe_method(method):
     """Register a function as a method attached to the Pandas DataFrame.
@@ -23,7 +25,15 @@ def register_dataframe_method(method):
 
             @wraps(method)
             def __call__(self, *args, **kwargs):
-                return method(self._obj, *args, **kwargs)
+                with stack_counter.global_scf.get_sc() as sc:
+                    #ipdb.set_trace()
+                    ret = method(self._obj, *args, **kwargs)
+                    if sc.scf.level == 1:
+                        #print("pf dataframe __call__")
+                        global handle_pandas_method_call
+                        if handle_pandas_method_call:
+                            handle_pandas_method_call(self._obj, method.__name__, args, kwargs, ret)
+                    return ret
 
         register_dataframe_accessor(method.__name__)(AccessorMethod)
 
