@@ -34,18 +34,17 @@ and passing the decorator an accessor name.
 ```python
 # my_flavor.py
 
-import pandas as pd
 import pandas_flavor as pf
 
 @pf.register_dataframe_accessor('my_flavor')
 class MyFlavor(object):
 
   def __init__(self, data):
-    self._data
+    self._data = data
 
-    def row_by_value(self, col, value):
-        """Slice out row from DataFrame by a value."""
-        return self._data[self._data[col] == value].squeeze()
+  def row_by_value(self, col, value):
+    """Slice out row from DataFrame by a value."""
+    return self._data[self._data[col] == value].squeeze()
 
 ```
 
@@ -87,7 +86,6 @@ intermediate accessor is needed.
 ```python
 # my_flavor.py
 
-import pandas as pd
 import pandas_flavor as pf
 
 @pf.register_dataframe_method
@@ -98,10 +96,11 @@ def row_by_value(df, col, value):
 ```
 
 ```python
+import pandas as pd
 import my_flavor
 
 # DataFrame.
-df = DataFrame(data={
+df = pd.DataFrame(data={
   "x": [10, 20, 25],
   "y": [0, 2, 5]
 })
