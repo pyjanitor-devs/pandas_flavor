@@ -30,12 +30,19 @@ def register_dataframe_method(method):
                     #ipdb.set_trace()
                             
                     method_call_obj = None
-                    if sc.scf.level == 1:
-                        global start_method_call
+                    global start_method_call
+                    stack_depth = sc.scf.level
+                    if stack_depth == 1:
                         if start_method_call:
-                            method_call_obj = start_method_call(self._obj, method.__name__, args, kwargs)
-                    
-                    ret = method(self._obj, *args, **kwargs)
+                            method_call_obj = start_method_call(self._obj, method.__name__, args, kwargs, stack_depth)
+                        ret = method(self._obj, *args, **kwargs)
+                    elif stack_depth == 2 and method.__name__ == 'copy':
+                        #ipdb.set_trace()
+                        if start_method_call:
+                            method_call_obj = start_method_call(self._obj, method.__name__, args, kwargs, stack_depth)
+                        ret = method(self._obj, *args, **kwargs)
+                    else:
+                        ret = method(self._obj, *args, **kwargs)
 
                     if method_call_obj:
                         method_call_obj.handle_end_method_call(ret)
@@ -63,10 +70,11 @@ def register_series_method(method):
             def __call__(self, *args, **kwargs):
                 with stack_counter.global_scf.get_sc() as sc:
                     method_call_obj = None
-                    if sc.scf.level <= 2:
+                    stack_depth = sc.scf.level
+                    if stack_depth <= 2:
                         global start_method_call
                         if start_method_call:
-                            method_call_obj = start_method_call(self._obj, method.__name__, args, kwargs)
+                            method_call_obj = start_method_call(self._obj, method.__name__, args, kwargs, stack_depth)
                             
                     ret = method(self._obj, *args, **kwargs)
 
