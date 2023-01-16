@@ -1,10 +1,11 @@
-import ipdb
 from functools import wraps
 from pandas.api.extensions import register_series_accessor, register_dataframe_accessor
 import inspect
-from . import stack_counter
+from contextlib import nullcontext
 
-start_method_call = None
+cb_notify_dataframe_method_call = None
+cb_notify_series_method_call = None
+stack_counter_context = None
 
 def register_dataframe_method(method):
     """Register a function as a method attached to the Pandas DataFrame.
@@ -29,24 +30,18 @@ def register_dataframe_method(method):
 
             @wraps(method)
             def __call__(self, *args, **kwargs):
-                with stack_counter.global_scf.get_sc() as sc:
-                    #ipdb.set_trace()
-                            
+                global stack_counter_context_manager
+                with stack_counter_context.get_sc() if stack_counter_context else nullcontext() as sc:
                     method_call_obj = None
-                    global start_method_call
-                    stack_depth = sc.scf.level
-                    if stack_depth == 1:
-                        if start_method_call:
-                            #ipdb.set_trace()
-                            method_call_obj = start_method_call(self._obj, method.__name__, method_signature, args, kwargs, stack_depth)
-                        ret = method(self._obj, *args, **kwargs)
-                    elif stack_depth == 2 and method.__name__ == 'copy':
-                        #ipdb.set_trace()
-                        if start_method_call:
-                            method_call_obj = start_method_call(self._obj, method.__name__, method_signature, args, kwargs, stack_depth)
-                        ret = method(self._obj, *args, **kwargs)
-                    else:
-                        ret = method(self._obj, *args, **kwargs)
+                    global cb_notify_dataframe_method_call
+                    if cb_notify_dataframe_method_call:
+                        stack_depth = sc.scf.level
+                        method_call_obj = cb_notify_dataframe_method_call(self._obj, method.__name__, method_signature, args, kwargs, stack_depth)
+                        if method_call_obj:
+                            new_args, new_kwargs = method_call_obj.handle_start_method_call()
+                            args = new_args[1:]; kwargs = new_kwargs
+
+                    ret = method(self._obj, *args, **kwargs)
 
                     if method_call_obj:
                         method_call_obj.handle_end_method_call(ret)
@@ -74,13 +69,16 @@ def register_series_method(method):
 
             @wraps(method)
             def __call__(self, *args, **kwargs):
-                with stack_counter.global_scf.get_sc() as sc:
+                global stack_counter_context_manager
+                with stack_counter_context.get_sc() if stack_counter_context else nullcontext() as sc:
                     method_call_obj = None
-                    stack_depth = sc.scf.level
-                    if stack_depth <= 2:
-                        global start_method_call
-                        if start_method_call:
-                            method_call_obj = start_method_call(self._obj, method.__name__, method_signature, args, kwargs, stack_depth)
+                    global cb_notify_series_method_call
+                    if cb_notify_series_method_call:
+                        stack_depth = sc.scf.level
+                        method_call_obj = cb_notify_series_method_call(self._obj, method.__name__, method_signature, args, kwargs, stack_depth)
+                        if method_call_obj:
+                            new_args, new_kwargs = method_call_obj.handle_start_method_call()
+                            args = new_args[1:]; kwargs = new_kwargs
                             
                     ret = method(self._obj, *args, **kwargs)
 
