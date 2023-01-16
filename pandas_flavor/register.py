@@ -3,9 +3,9 @@ from pandas.api.extensions import register_series_accessor, register_dataframe_a
 import inspect
 from contextlib import nullcontext
 
+cb_create_call_stack_context_manager = None
 cb_notify_dataframe_method_call = None
 cb_notify_series_method_call = None
-stack_counter_context = None
 
 def register_dataframe_method(method):
     """Register a function as a method attached to the Pandas DataFrame.
@@ -30,13 +30,12 @@ def register_dataframe_method(method):
 
             @wraps(method)
             def __call__(self, *args, **kwargs):
-                global stack_counter_context_manager
-                with stack_counter_context.get_sc() if stack_counter_context else nullcontext() as sc:
+                global cb_create_call_stack_context_manager
+                with cb_create_call_stack_context_manager(method.__name__) if cb_create_call_stack_context_manager else nullcontext() as sc:
                     method_call_obj = None
                     global cb_notify_dataframe_method_call
                     if cb_notify_dataframe_method_call:
-                        stack_depth = sc.scf.level
-                        method_call_obj = cb_notify_dataframe_method_call(self._obj, method.__name__, method_signature, args, kwargs, stack_depth)
+                        method_call_obj = cb_notify_dataframe_method_call(self._obj, method.__name__, method_signature, args, kwargs)
                         if method_call_obj:
                             new_args, new_kwargs = method_call_obj.handle_start_method_call()
                             args = new_args[1:]; kwargs = new_kwargs
@@ -69,13 +68,12 @@ def register_series_method(method):
 
             @wraps(method)
             def __call__(self, *args, **kwargs):
-                global stack_counter_context_manager
-                with stack_counter_context.get_sc() if stack_counter_context else nullcontext() as sc:
+                global cb_create_call_stack_context_manager
+                with cb_create_call_stack_context_manager(method.__name__) if cb_create_call_stack_context_manager else nullcontext() as sc:
                     method_call_obj = None
                     global cb_notify_series_method_call
                     if cb_notify_series_method_call:
-                        stack_depth = sc.scf.level
-                        method_call_obj = cb_notify_series_method_call(self._obj, method.__name__, method_signature, args, kwargs, stack_depth)
+                        method_call_obj = cb_notify_series_method_call(self._obj, method.__name__, method_signature, args, kwargs)
                         if method_call_obj:
                             new_args, new_kwargs = method_call_obj.handle_start_method_call()
                             args = new_args[1:]; kwargs = new_kwargs
