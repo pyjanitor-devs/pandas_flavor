@@ -32,7 +32,8 @@ def register_dataframe_method(method):
                 method_call_obj = cb_create_call_stack_context_manager(method.__name__, args, kwargs) if cb_create_call_stack_context_manager else nullcontext()
                 with method_call_obj:
                     if not isinstance(method_call_obj, nullcontext):
-                        new_args, new_kwargs = method_call_obj.handle_start_method_call(self._obj, method.__name__, method_signature, args, kwargs)
+                        all_args = tuple([self._obj] + list(args))
+                        new_args, new_kwargs = method_call_obj.handle_start_method_call(method.__name__, method_signature, all_args, kwargs)
                         args = new_args[1:]; kwargs = new_kwargs
 
                     ret = method(self._obj, *args, **kwargs)
@@ -67,7 +68,8 @@ def register_series_method(method):
                 method_call_obj = cb_create_call_stack_context_manager(method.__name__, args, kwargs) if cb_create_call_stack_context_manager else nullcontext()
                 with method_call_obj:
                     if not isinstance(method_call_obj, nullcontext):
-                        new_args, new_kwargs = method_call_obj.handle_start_method_call(self._obj, method.__name__, method_signature, args, kwargs)
+                        all_args = tuple([self._obj] + list(args))
+                        new_args, new_kwargs = method_call_obj.handle_start_method_call(method.__name__, method_signature, all_args, kwargs)
                         args = new_args[1:]; kwargs = new_kwargs
 
                     ret = method(self._obj, *args, **kwargs)
