@@ -3,7 +3,7 @@ from pandas.api.extensions import register_series_accessor, register_dataframe_a
 import inspect
 from contextlib import nullcontext
 
-cb_create_call_stack_context_manager = None
+method_call_ctx_factory = None
 
 def register_dataframe_method(method):
     """Register a function as a method attached to the Pandas DataFrame.
@@ -28,18 +28,18 @@ def register_dataframe_method(method):
 
             @wraps(method)
             def __call__(self, *args, **kwargs):
-                global cb_create_call_stack_context_manager
-                method_call_obj = cb_create_call_stack_context_manager(method.__name__, args, kwargs) if cb_create_call_stack_context_manager else nullcontext()
-                with method_call_obj:
-                    if not isinstance(method_call_obj, nullcontext):
+                global method_call_ctx_factory
+                method_call_ctx = method_call_ctx_factory(method.__name__, args, kwargs) if method_call_ctx_factory else nullcontext()
+                with method_call_ctx:
+                    if not isinstance(method_call_ctx, nullcontext):
                         all_args = tuple([self._obj] + list(args))
-                        new_args, new_kwargs = method_call_obj.handle_start_method_call(method.__name__, method_signature, all_args, kwargs)
+                        new_args, new_kwargs = method_call_ctx.handle_start_method_call(method.__name__, method_signature, all_args, kwargs)
                         args = new_args[1:]; kwargs = new_kwargs
 
                     ret = method(self._obj, *args, **kwargs)
 
-                    if not isinstance(method_call_obj, nullcontext):
-                        method_call_obj.handle_end_method_call(ret)
+                    if not isinstance(method_call_ctx, nullcontext):
+                        method_call_ctx.handle_end_method_call(ret)
 
                     return ret
 
@@ -64,18 +64,18 @@ def register_series_method(method):
 
             @wraps(method)
             def __call__(self, *args, **kwargs):
-                global cb_create_call_stack_context_manager
-                method_call_obj = cb_create_call_stack_context_manager(method.__name__, args, kwargs) if cb_create_call_stack_context_manager else nullcontext()
-                with method_call_obj:
-                    if not isinstance(method_call_obj, nullcontext):
+                global method_call_ctx_factory
+                method_call_ctx = method_call_ctx_factory(method.__name__, args, kwargs) if method_call_ctx_factory else nullcontext()
+                with method_call_ctx:
+                    if not isinstance(method_call_ctx, nullcontext):
                         all_args = tuple([self._obj] + list(args))
-                        new_args, new_kwargs = method_call_obj.handle_start_method_call(method.__name__, method_signature, all_args, kwargs)
+                        new_args, new_kwargs = method_call_ctx.handle_start_method_call(method.__name__, method_signature, all_args, kwargs)
                         args = new_args[1:]; kwargs = new_kwargs
 
                     ret = method(self._obj, *args, **kwargs)
 
-                    if not isinstance(method_call_obj, nullcontext):
-                        method_call_obj.handle_end_method_call(ret)
+                    if not isinstance(method_call_ctx, nullcontext):
+                        method_call_ctx.handle_end_method_call(ret)
 
                     return ret
 
