@@ -147,11 +147,11 @@ If you have a feature request, please open an issue or submit a PR!
 
 ## TL;DR
 
-Pandas 0.23 introduced a simpler API for [extending Pandas](https://pandas.pydata.org/pandas-docs/stable/development/extending.html#extending-pandas). This API provided two key decorators, `register_dataframe_accessor` and `register_series_accessor`, that enable users to register **accessors** with Pandas DataFrames and Series. 
+Pandas 0.23 introduced a simpler API for [extending Pandas](https://pandas.pydata.org/pandas-docs/stable/development/extending.html#extending-pandas). This API provided two key decorators, `register_dataframe_accessor` and `register_series_accessor`, that enable users to register **accessors** with Pandas DataFrames and Series.
 
-Pandas Flavor originated as a library to backport these decorators to older versions of Pandas (<0.23). While doing the backporting, it became clear that registering **methods** directly to Pandas objects might be a desired feature as well.[*](#footnote) 
+Pandas Flavor originated as a library to backport these decorators to older versions of Pandas (<0.23). While doing the backporting, it became clear that registering **methods** directly to Pandas objects might be a desired feature as well.[*](#footnote)
 
-<a name="footnote">*</a>*It is likely that Pandas deliberately chose not implement to this feature. If everyone starts monkeypatching DataFrames with their custom methods, it could lead to confusion in the Pandas community. The preferred Pandas approach is to namespace your methods by registering an accessor that contains your custom methods.* 
+<a name="footnote">*</a>*It is likely that Pandas deliberately chose not implement to this feature. If everyone starts monkeypatching DataFrames with their custom methods, it could lead to confusion in the Pandas community. The preferred Pandas approach is to namespace your methods by registering an accessor that contains your custom methods.*
 
 **So how does method registration work?**
 
