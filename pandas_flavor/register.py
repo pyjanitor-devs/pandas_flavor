@@ -25,7 +25,7 @@ def handle_pandas_extention_call(method, method_signature, obj, args, kwargs):
     will modify original args and kwargs before *method* call.
 
     method_call_ctx_factory function signature: (method_name: str, args: list, kwargs: dict) -> MethodCallCtx
-    
+
     MethodCallCtx is an abstract class:
     class MethodCallCtx(abc.ABC):
         @abstractmethod
@@ -36,7 +36,7 @@ def handle_pandas_extention_call(method, method_signature, obj, args, kwargs):
         def handle_start_method_call(self, method_name: str, method_signature: inspect.Signature, method_args: list, method_kwargs: dict) -> tuple(list, dict): raise NotImplemented
         @abstractmethod
         def handle_end_method_call(self, ret: object) -> None: raise NotImplemented
-    
+
 
     Parameters
     ----------
