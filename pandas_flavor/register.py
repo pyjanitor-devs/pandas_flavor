@@ -8,6 +8,7 @@ from contextlib import nullcontext
 
 method_call_ctx_factory = None
 
+
 def handle_pandas_extention_call(method, method_signature, obj, args, kwargs):
     """
     This function is called when the user calls the registered method on pandas dataframe object.
@@ -19,7 +20,7 @@ def handle_pandas_extention_call(method, method_signature, obj, args, kwargs):
     In this case the implementation calls the registered method with unmodified args and kwargs and returns underlying method result.
 
     b) case when *method_call_ctx_factory* is not None
-    In this case *method_call_ctx_factory* expected to refer to the function to create the context object. The context object will be used 
+    In this case *method_call_ctx_factory* expected to refer to the function to create the context object. The context object will be used
     to process inputs and outputs of *method* call. It is also possible that the context object method *handle_start_method_call*
     will modify original args and kwargs before *method* call.
 
@@ -39,11 +40,11 @@ def handle_pandas_extention_call(method, method_signature, obj, args, kwargs):
 
     Parameters
     ----------
-    method : 
+    method :
         method object as registered by decorator register_dataframe_method (or register_series_method)
-    method_signature : 
+    method_signature :
         signature of method as returned by inspect.signature
-    obj : 
+    obj :
         pandas object - Dataframe or Series
     *args : list
         The arguments to pass to the registered method.
@@ -67,10 +68,7 @@ def handle_pandas_extention_call(method, method_signature, obj, args, kwargs):
     with method_call_ctx:
         if not isinstance(method_call_ctx, nullcontext):
             all_args = tuple([obj] + list(args))
-            (
-                new_args,
-                new_kwargs,
-            ) = method_call_ctx.handle_start_method_call(
+            (new_args, new_kwargs,) = method_call_ctx.handle_start_method_call(
                 method.__name__, method_signature, all_args, kwargs
             )
             args = new_args[1:]
@@ -81,7 +79,8 @@ def handle_pandas_extention_call(method, method_signature, obj, args, kwargs):
         if not isinstance(method_call_ctx, nullcontext):
             method_call_ctx.handle_end_method_call(ret)
 
-        return ret    
+        return ret
+
 
 def register_dataframe_method(method):
     """Register a function as a method attached to the Pandas DataFrame.
@@ -106,7 +105,9 @@ def register_dataframe_method(method):
 
             @wraps(method)
             def __call__(self, *args, **kwargs):
-                return handle_pandas_extention_call(method, method_signature, self._obj, args, kwargs)
+                return handle_pandas_extention_call(
+                    method, method_signature, self._obj, args, kwargs
+                )
 
         register_dataframe_accessor(method.__name__)(AccessorMethod)
 
@@ -129,7 +130,9 @@ def register_series_method(method):
 
             @wraps(method)
             def __call__(self, *args, **kwargs):
-                return handle_pandas_extention_call(method, method_signature, self._obj, args, kwargs)
+                return handle_pandas_extention_call(
+                    method, method_signature, self._obj, args, kwargs
+                )
 
         register_series_accessor(method.__name__)(AccessorMethod)
 
