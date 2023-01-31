@@ -23,11 +23,19 @@ def handle_pandas_extention_call(method, method_signature, obj, args, kwargs):
     to process inputs and outputs of *method* call. It is also possible that the context object method *handle_start_method_call*
     will modify original args and kwargs before *method* call.
 
-    method_call_ctx_factory function signature: (method_name: str, args: list, kwargs: dict) -> ctx object
-
-    ctx object should implement *with* context __enter__/__exit__ as well as methods:
-    - handle_start_method_call(method_name: str, method_signature: inspect.Signature, args: list, kwargs: dict) -> (list, dict)
-    - handle_end_method(obj) -> None
+    method_call_ctx_factory function signature: (method_name: str, args: list, kwargs: dict) -> MethodCallCtx
+    
+    MethodCallCtx is an abstract class:
+    class MethodCallCtx(abc.ABC):
+        @abstractmethod
+        def __enter__(self) -> None: raise NotImplemented
+        @abstractmethod
+        def __exit__(self, exc_type, exc_value, traceback) -> None: raise NotImplemented
+        @abstractmethod
+        def handle_start_method_call(self, method_name: str, method_signature: inspect.Signature, method_args: list, method_kwargs: dict) -> tuple(list, dict): raise NotImplemented
+        @abstractmethod
+        def handle_end_method_call(self, ret: object) -> None: raise NotImplemented
+    
 
     Parameters
     ----------
