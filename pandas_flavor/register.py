@@ -70,15 +70,10 @@ def handle_pandas_extension_call(method, method_signature, obj, args, kwargs):
     """
 
     global method_call_ctx_factory
-
-    method_call_ctx = (
-        method_call_ctx_factory(method.__name__, args, kwargs)
-        if method_call_ctx_factory
-        else nullcontext()
-    )
-
-    with method_call_ctx:
-        if not isinstance(method_call_ctx, nullcontext):
+    with method_call_ctx_factory(method.__name__, args, kwargs) as method_call_ctx:
+        if method_call_ctx is None: # nullcontext __enter__ returns None
+            ret = method(obj, *args, **kwargs)
+        else:
             all_args = tuple([obj] + list(args))
             (new_args, new_kwargs,) = method_call_ctx.handle_start_method_call(
                 method.__name__, method_signature, all_args, kwargs
@@ -86,9 +81,8 @@ def handle_pandas_extension_call(method, method_signature, obj, args, kwargs):
             args = new_args[1:]
             kwargs = new_kwargs
 
-        ret = method(obj, *args, **kwargs)
+            ret = method(obj, *args, **kwargs)
 
-        if not isinstance(method_call_ctx, nullcontext):
             method_call_ctx.handle_end_method_call(ret)
 
         return ret
@@ -117,7 +111,11 @@ def register_dataframe_method(method):
 
             @wraps(method)
             def __call__(self, *args, **kwargs):
-                return handle_pandas_extention_call(
+                global method_call_ctx_factory
+                if method_call_ctx_factory is None:
+                    return method(obj, *args, **kwargs)
+                
+                return handle_pandas_extension_call(
                     method, method_signature, self._obj, args, kwargs
                 )
 
@@ -142,7 +140,11 @@ def register_series_method(method):
 
             @wraps(method)
             def __call__(self, *args, **kwargs):
-                return handle_pandas_extention_call(
+                global method_call_ctx_factory
+                if method_call_ctx_factory is None:
+                    return method(obj, *args, **kwargs)
+
+                return handle_pandas_extension_call(
                     method, method_signature, self._obj, args, kwargs
                 )
 
