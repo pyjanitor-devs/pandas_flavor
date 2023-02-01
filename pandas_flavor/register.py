@@ -20,13 +20,13 @@ def handle_pandas_extension_call(method, method_signature, obj, args, kwargs):
 
     When `method_call_ctx_factory` is None, the implementation calls the registered method with unmodified args and kwargs and returns underlying method result.
 
-    When `method_call_ctx_factory` is not None, `method_call_ctx_factory` is expected to refer to the function to create the context object. 
+    When `method_call_ctx_factory` is not None, `method_call_ctx_factory` is expected to refer to the function to create the context object.
     The context object will be used to process inputs and outputs of `method` calls.
     It is also possible that the context object method `handle_start_method_call`
     will modify original args and kwargs before `method` call.
 
     `method_call_ctx_factory` is a function that should have the following signature:
-    
+
      `f(method_name: str, args: list, kwargs: dict) -> MethodCallCtx`
 
 
@@ -34,19 +34,19 @@ def handle_pandas_extension_call(method, method_signature, obj, args, kwargs):
     class MethodCallCtx(abc.ABC):
 
         @abstractmethod
-        def __enter__(self) -> None: 
+        def __enter__(self) -> None:
             raise NotImplemented
 
         @abstractmethod
-        def __exit__(self, exc_type, exc_value, traceback) -> None: 
+        def __exit__(self, exc_type, exc_value, traceback) -> None:
             raise NotImplemented
 
         @abstractmethod
-        def handle_start_method_call(self, method_name: str, method_signature: inspect.Signature, method_args: list, method_kwargs: dict) -> tuple(list, dict): 
+        def handle_start_method_call(self, method_name: str, method_signature: inspect.Signature, method_args: list, method_kwargs: dict) -> tuple(list, dict):
             raise NotImplemented
 
         @abstractmethod
-        def handle_end_method_call(self, ret: object) -> None: 
+        def handle_end_method_call(self, ret: object) -> None:
             raise NotImplemented
 
 
