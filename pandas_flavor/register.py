@@ -70,8 +70,10 @@ def handle_pandas_extension_call(method, method_signature, obj, args, kwargs):
     """
 
     global method_call_ctx_factory
-    with method_call_ctx_factory(method.__name__, args, kwargs) as method_call_ctx:
-        if method_call_ctx is None: # nullcontext __enter__ returns None
+    with method_call_ctx_factory(
+        method.__name__, args, kwargs
+    ) as method_call_ctx:
+        if method_call_ctx is None:  # nullcontext __enter__ returns None
             ret = method(obj, *args, **kwargs)
         else:
             all_args = tuple([obj] + list(args))
@@ -114,7 +116,7 @@ def register_dataframe_method(method):
                 global method_call_ctx_factory
                 if method_call_ctx_factory is None:
                     return method(obj, *args, **kwargs)
-                
+
                 return handle_pandas_extension_call(
                     method, method_signature, self._obj, args, kwargs
                 )
