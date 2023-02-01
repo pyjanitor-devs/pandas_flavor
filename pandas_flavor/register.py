@@ -115,7 +115,7 @@ def register_dataframe_method(method):
             def __call__(self, *args, **kwargs):
                 global method_call_ctx_factory
                 if method_call_ctx_factory is None:
-                    return method(obj, *args, **kwargs)
+                    return method(self._obj, *args, **kwargs)
 
                 return handle_pandas_extension_call(
                     method, method_signature, self._obj, args, kwargs
@@ -144,7 +144,7 @@ def register_series_method(method):
             def __call__(self, *args, **kwargs):
                 global method_call_ctx_factory
                 if method_call_ctx_factory is None:
-                    return method(obj, *args, **kwargs)
+                    return method(self._obj, *args, **kwargs)
 
                 return handle_pandas_extension_call(
                     method, method_signature, self._obj, args, kwargs
