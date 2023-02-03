@@ -26,9 +26,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Pull latest commits of dev branch
+      - name: Pull latest commits of `master` branch
         run: |
-          git checkout main
+          git checkout master
           git pull
 
       # See https://github.com/marketplace/actions/wait-on-check
