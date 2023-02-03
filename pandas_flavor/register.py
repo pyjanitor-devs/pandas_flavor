@@ -112,12 +112,42 @@ def register_dataframe_method(method):
     method_signature = inspect.signature(method)
 
     def inner(*args, **kwargs):
+        """Inner function to register the method.
+
+        This function is called when the user
+        decorates a function with register_dataframe_method.
+
+        Args:
+            *args: The arguments to pass to the registered method.
+            **kwargs: The keyword arguments to pass to the registered method.
+
+        Returns:
+            method: The original method.
+        """
+
         class AccessorMethod(object):
+            """DataFrame Accessor method class."""
+
             def __init__(self, pandas_obj):
+                """Initialize the accessor method class.
+
+                Args:
+                    pandas_obj (pandas.DataFrame): The pandas DataFrame object.
+                """
                 self._obj = pandas_obj
 
             @wraps(method)
             def __call__(self, *args, **kwargs):
+                """Call the accessor method.
+
+                Args:
+                    *args: The arguments to pass to the registered method.
+                    **kwargs: The keyword arguments to pass
+                        to the registered method.
+
+                Returns:
+                    object: The result of calling of the method.
+                """
                 global method_call_ctx_factory
                 if method_call_ctx_factory is None:
                     return method(self._obj, *args, **kwargs)
@@ -147,13 +177,30 @@ def register_series_method(method):
 
     def inner(*args, **kwargs):
         class AccessorMethod(object):
+            """Series Accessor method class."""
+
             __doc__ = method.__doc__
 
             def __init__(self, pandas_obj):
+                """Initialize the accessor method class.
+
+                Args:
+                    pandas_obj (pandas.Series): The pandas Series object.
+                """
                 self._obj = pandas_obj
 
             @wraps(method)
             def __call__(self, *args, **kwargs):
+                """Call the accessor method.
+
+                Args:
+                    *args: The arguments to pass to the registered method.
+                    **kwargs: The keyword arguments to pass
+                        to the registered method.
+
+                Returns:
+                    object: The result of calling of the method.
+                """
                 global method_call_ctx_factory
                 if method_call_ctx_factory is None:
                     return method(self._obj, *args, **kwargs)
