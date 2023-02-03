@@ -4,28 +4,37 @@ from pandas.api.extensions import (
     register_dataframe_accessor,
 )
 import inspect
-from contextlib import nullcontext
 
 method_call_ctx_factory = None
 
 
 def handle_pandas_extension_call(method, method_signature, obj, args, kwargs):
-    """
-    This function is called when the user calls a pandas DataFrame object's method.
-    The pandas extension mechanism passes args and kwargs of original method call as it is applied to obj
+    """Handle pandas extension call.
+
+    This function is called when the user calls
+    a pandas DataFrame object's method.
+    The pandas extension mechanism passes args and kwargs
+    of the original method call as it is applied to obj.
 
     Our implementation uses the global variable `method_call_ctx_factory`.
 
     `method_call_ctx_factory` can be either None or an abstract class.
 
-    When `method_call_ctx_factory` is None, the implementation calls the registered method with unmodified args and kwargs and returns underlying method result.
+    When `method_call_ctx_factory` is None,
+    the implementation calls the registered method
+    with unmodified args and kwargs and returns underlying method result.
 
-    When `method_call_ctx_factory` is not None, `method_call_ctx_factory` is expected to refer to the function to create the context object.
-    The context object will be used to process inputs and outputs of `method` calls.
-    It is also possible that the context object method `handle_start_method_call`
+    When `method_call_ctx_factory` is not None,
+    `method_call_ctx_factory` is expected to refer to
+    the function to create the context object.
+    The context object will be used to process
+    inputs and outputs of `method` calls.
+    It is also possible that
+    the context object method `handle_start_method_call`
     will modify original args and kwargs before `method` call.
 
-    `method_call_ctx_factory` is a function that should have the following signature:
+    `method_call_ctx_factory` is a function
+    that should have the following signature:
 
      `f(method_name: str, args: list, kwargs: dict) -> MethodCallCtx`
 
@@ -50,24 +59,17 @@ def handle_pandas_extension_call(method, method_signature, obj, args, kwargs):
             raise NotImplemented
 
 
-    Parameters
-    ----------
-    method :
-        method object as registered by decorator register_dataframe_method (or register_series_method)
-    method_signature :
-        signature of method as returned by inspect.signature
-    obj :
-        pandas object - Dataframe or Series
-    *args : list
-        The arguments to pass to the registered method.
-    **kwargs : dict
-        The keyword arguments to pass to the registered method.
+    Args:
+        method (callable): method object as registered by decorator
+            register_dataframe_method (or register_series_method)
+        method_signature: signature of method as returned by inspect.signature
+        obj: Dataframe or Series
+        args: The arguments to pass to the registered method.
+        kwargs: The keyword arguments to pass to the registered method.
 
-    Returns
-    -------
-    object :
-        The result of calling of the method.
-    """
+    Returns:
+        object`: The result of calling of the method.
+    """  # noqa: E501
 
     global method_call_ctx_factory
     with method_call_ctx_factory(
@@ -93,15 +95,18 @@ def handle_pandas_extension_call(method, method_signature, obj, args, kwargs):
 def register_dataframe_method(method):
     """Register a function as a method attached to the Pandas DataFrame.
 
-    Example
-    -------
-
-    .. code-block:: python
+    Example:
 
         @register_dataframe_method
         def print_column(df, col):
             '''Print the dataframe column given'''
             print(df[col])
+
+    Args:
+        method (callable): callable to register as a dataframe method.
+
+    Returns:
+        callable: The original method.
     """
 
     method_signature = inspect.signature(method)
@@ -129,7 +134,14 @@ def register_dataframe_method(method):
 
 
 def register_series_method(method):
-    """Register a function as a method attached to the Pandas Series."""
+    """Register a function as a method attached to the Pandas Series.
+
+    Args:
+        method (callable): callable to register as a series method.
+
+    Returns:
+        callable: The original method.
+    """
 
     method_signature = inspect.signature(method)
 

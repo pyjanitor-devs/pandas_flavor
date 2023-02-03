@@ -24,12 +24,14 @@ REQUIRED = ["pandas>=0.23", "xarray", "lazy-loader>=0.1"]
 # The rest you shouldn't have to touch too much :)
 # ------------------------------------------------
 # Except, perhaps the License and Trove Classifiers!
-# If you do change the License, remember to change the Trove Classifier for that!
+# If you do change the License,
+# remember to change the Trove Classifier for that!
 
 here = os.path.abspath(os.path.dirname(__file__))
 
 # Import the README and use it as the long-description.
-# Note: this will only work if 'README.rst' is present in your MANIFEST.in file!
+# Note: this will only work if 'README.rst'
+# is present in your MANIFEST.in file!
 with io.open(os.path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = "\n" + f.read()
 
@@ -46,8 +48,13 @@ class UploadCommand(Command):
     user_options = []
 
     @staticmethod
-    def status(s):
-        """Prints things in bold."""
+    def status(s: str):
+        """Prints things in bold.
+
+        Args:
+            s: The string to print.
+
+        """
         print("\033[1m{0}\033[0m".format(s))
 
     def initialize_options(self):
