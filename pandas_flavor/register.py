@@ -79,7 +79,10 @@ def handle_pandas_extension_call(method, method_signature, obj, args, kwargs):
             ret = method(obj, *args, **kwargs)
         else:
             all_args = tuple([obj] + list(args))
-            (new_args, new_kwargs,) = method_call_ctx.handle_start_method_call(
+            (
+                new_args,
+                new_kwargs,
+            ) = method_call_ctx.handle_start_method_call(
                 method.__name__, method_signature, all_args, kwargs
             )
             args = new_args[1:]
