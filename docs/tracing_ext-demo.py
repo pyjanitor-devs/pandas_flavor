@@ -40,7 +40,8 @@ class tracer:
         self.end_ts = time.time()
 
     def __exit__(self, exc_type, value, traceback):
-        print(f"method {self.method_name} took {self.end_ts - self.start_ts} secs to execute")
+        call_dur = self.end_ts - self.start_ts
+        print(f"method {self.method_name} took {call_dur} secs to execute")
 
 
 pf.register.method_call_ctx_factory = tracer.create_tracer
