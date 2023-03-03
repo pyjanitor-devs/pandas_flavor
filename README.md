@@ -121,6 +121,11 @@ df.row_by_value('x', 10)
 # Name: 0, dtype: int64
 ```
 
+## Registered methods tracing
+
+Since version 0.5.0 pandas_flavor allows [tracing of the registered method calls](/docs/tracing_ext.md). Now it is possible to add additional run-time logic around registered method calls which can be used for support tasks. This extention was introduced to allow visualization of [pyjanitor](https://github.com/pyjanitor-devs/pyjanitor) method call chains as implemented in [pyjviz](https://github.com/pyjanitor-devs/pyjviz)
+
+
 ## Available Methods
 
 - **register_dataframe_method**: register a method directly with a pandas DataFrame.
