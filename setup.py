@@ -1,9 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-# Note: To use the 'upload' functionality of this file, you must:
-#   $ pip install twine
-
+"""Setup script."""
 import io
 import os
 import sys
@@ -19,7 +14,7 @@ EMAIL = "zachsailer@gmail.com"
 AUTHOR = "Zach Sailer"
 
 # What packages are required for this module to be executed?
-REQUIRED = ["pandas>=0.23", "xarray", "lazy-loader>=0.1"]
+REQUIRED = ["pandas>=0.23", "xarray"]
 
 # The rest you shouldn't have to touch too much :)
 # ------------------------------------------------
@@ -58,12 +53,15 @@ class UploadCommand(Command):
         print("\033[1m{0}\033[0m".format(s))
 
     def initialize_options(self):
+        """Initialize options."""
         pass
 
     def finalize_options(self):
+        """Finalize options."""
         pass
 
     def run(self):
+        """Build and publish the package."""
         try:
             self.status("Removing previous builds…")
             rmtree(os.path.join(here, "dist"))
