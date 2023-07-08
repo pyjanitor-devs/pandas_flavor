@@ -10,8 +10,11 @@ import pandas_flavor as pf
 def my_method(df: pd.DataFrame) -> pd.DataFrame:
     """Transpose the DataFrame.
 
-    :param df: The DataFrame to transpose.
-    :returns: The transposed DataFrame.
+    Args:
+        df: The DataFrame to transpose.
+
+    Returns:
+        The transposed DataFrame.
     """
     print("my_method called")
     return df.transpose()
@@ -19,11 +22,14 @@ def my_method(df: pd.DataFrame) -> pd.DataFrame:
 
 @pf.register_dataframe_method
 def another_method(df: pd.DataFrame, new_col_d) -> pd.DataFrame:
-    """Add a new column to the DataFrame.
+    """Adds a new column to the DataFrame.
 
-    :param df: The DataFrame to add the column to.
-    :param new_col_d: A dictionary of column names and values.
-    :returns: The DataFrame with the new column.
+    Args:
+        df (DataFrame): The DataFrame to add the column to.
+        new_col_d (dict): A dictionary of column names and values.
+
+    Returns:
+        DataFrame: The DataFrame with the new column.
     """
     print("another_method called")
     for col, v in new_col_d.items():
@@ -36,10 +42,13 @@ class tracer:
 
     @staticmethod
     def create_tracer(*args):
-        """Create a tracer.
+        """Creates a tracer.
 
-        :param *args: The arguments to the tracer.
-        :returns: The tracer.
+        Args:
+            *args: Variable length argument list for the tracer.
+
+        Returns:
+            The created tracer.
         """
         return tracer()
 
@@ -52,7 +61,8 @@ class tracer:
     def __enter__(self):
         """Enter the tracer.
 
-        :returns: The tracer.
+        Returns:
+            The tracer.
         """
         return self
 
@@ -61,11 +71,14 @@ class tracer:
     ):
         """Handle the start of a method call.
 
-        :param method_name: The name of the method.
-        :param method_signature: The signature of the method.
-        :param method_args: The arguments of the method.
-        :param method_kwagrs: The keyword arguments of the method.
-        :returns: The arguments and keyword arguments of the method.
+        Args:
+            method_name: The name of the method.
+            method_signature: The signature of the method.
+            method_args: The arguments of the method.
+            method_kwagrs: The keyword arguments of the method.
+
+        Returns:
+            The arguments and keyword arguments of the method.
         """
         self.method_name = method_name
         self.start_ts = time.time()
@@ -74,16 +87,18 @@ class tracer:
     def handle_end_method_call(self, ret):
         """Handle the end of a method call.
 
-        :param ret: The return value of the method.
+        Args:
+            ret: The return value of the method.
         """
         self.end_ts = time.time()
 
     def __exit__(self, exc_type, value, traceback):
         """Exit the tracer.
 
-        :param exc_type: The type of the exception.
-        :param value: The value of the exception.
-        :param traceback: The traceback of the exception.
+        Args:
+            exc_type: The type of the exception.
+            value: The value of the exception.
+            traceback: The traceback of the exception.
         """
         call_dur = self.end_ts - self.start_ts
         print(f"method {self.method_name} took {call_dur} secs to execute")

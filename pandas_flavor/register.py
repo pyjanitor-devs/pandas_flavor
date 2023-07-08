@@ -1,3 +1,4 @@
+"""Register functions as methods of Pandas DataFrame and Series."""
 from functools import wraps
 from pandas.api.extensions import (
     register_series_accessor,
@@ -179,6 +180,16 @@ def register_series_method(method):
     method_signature = inspect.signature(method)
 
     def inner(*args, **kwargs):
+        """Inner function to register the method.
+
+        Args:
+            *args: The arguments to pass to the registered method.
+            **kwargs: The keyword arguments to pass to the registered method.
+
+        Returns:
+            method: The original method.
+        """
+
         class AccessorMethod(object):
             """Series Accessor method class."""
 

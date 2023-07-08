@@ -1,2 +1,2 @@
 [darglint]
-docstring_style=sphinx
+docstring_style=google
