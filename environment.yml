@@ -7,11 +7,10 @@ dependencies:
   - xarray
   - pip
   - pre-commit
-  - pytest  # for tests
+  - pytest # for tests
   - black # code formatting
   - twine # for uploading to PyPI
   - bump2version
   - build # for building package distributions
   - pip:
-      - lazy-loader
       - tuna
