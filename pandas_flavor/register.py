@@ -1,4 +1,5 @@
 """Register functions as methods of Pandas DataFrame and Series."""
+
 from functools import wraps
 from pandas.api.extensions import (
     register_series_accessor,

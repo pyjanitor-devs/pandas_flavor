@@ -1,4 +1,5 @@
 """Tracing extension demo."""
+
 import time
 
 import pandas as pd
