@@ -23,7 +23,7 @@ Maybe you want to add new write methods to the Pandas DataFrame? Maybe you want 
 
 ## Register accessors
 
-Accessors (in pandas) are objects attached to a attribute on the Pandas DataFrame/Series
+Accessors (in pandas) are objects attached to an attribute on the Pandas DataFrame/Series
 that provide extra, specific functionality. For example, `pandas.DataFrame.plot` is an
 accessor that provides plotting functionality.
 
