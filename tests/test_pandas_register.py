@@ -1,4 +1,5 @@
 """Tests for pandas series and dataframe method registration."""
+
 import pandas_flavor as pf
 import pandas as pd
 
