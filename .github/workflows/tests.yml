@@ -26,7 +26,6 @@ jobs:
 
       - name: Run unit tests
         run: |
-          conda activate pandas-flavor
           python -m pip install -e .
           pytest
 
