@@ -18,14 +18,11 @@ jobs:
 
       # See: https://github.com/marketplace/actions/setup-miniconda
       - name: Setup miniconda
-        uses: conda-incubator/setup-miniconda@v2
+        uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
-          miniforge-variant: Mambaforge
-          channels: conda-forge
-          activate-environment: pandas-flavor
           environment-file: environment.yml
-          use-mamba: true
+          miniforge-version: latest
 
       - name: Run unit tests
         run: |
