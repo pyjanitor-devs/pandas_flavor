@@ -1,4 +1,5 @@
 """Register functions as methods of Pandas DataFrame and Series."""
+
 from __future__ import annotations
 
 import warnings
@@ -323,7 +324,7 @@ def register_groupby_accessor(name: str):
     return _register_accessor(name, DataFrameGroupBy)
 
 
-def register_groupby_method(method: Callable) -> Callable:
+def register_groupby_method(method: Callable):
     """Register a function as a method attached to the pandas DataFrameGroupBy.
 
     Example:
@@ -335,22 +336,60 @@ def register_groupby_method(method: Callable) -> Callable:
     !!! info "New in version 0.7.0"
 
     Args:
-        method: Function to be registered as a method on the DataFrame.
+        method: Function to be registered as a method
+            on the DataFrameGroupBy object.
 
     Returns:
-        A Callable.
+        callable: The original method.
     """
+    method_signature = inspect.signature(method)
 
     def inner(*args: tuple, **kwargs: dict):
+        """Inner function to register the method.
+
+        This function is called when the user
+        decorates a function with register_groupby_method.
+
+        Args:
+            *args: The arguments to pass to the registered method.
+            **kwargs: The keyword arguments to pass to the registered method.
+
+        Returns:
+            method: The original method.
+        """
+
         class AccessorMethod(object):
+            """DataFrameGroupBy Accessor method class."""
+
             __doc__ = method.__doc__
 
             def __init__(self, obj):
+                """Initialize the accessor method class.
+
+                Args:
+                    obj: The pandas DataFrameGroupBy object.
+                """
                 self._obj = obj
 
             @wraps(method)
             def __call__(self, *args, **kwargs):
-                return method(self._obj, *args, **kwargs)
+                """Call the accessor method.
+
+                Args:
+                    *args: The arguments to pass to the registered method.
+                    **kwargs: The keyword arguments to pass
+                        to the registered method.
+
+                Returns:
+                    object: The result of calling of the method.
+                """
+                global method_call_ctx_factory
+                if method_call_ctx_factory is None:
+                    return method(self._obj, *args, **kwargs)
+
+                return handle_pandas_extension_call(
+                    method, method_signature, self._obj, args, kwargs
+                )
 
         register_groupby_accessor(method.__name__)(AccessorMethod)
         return method
