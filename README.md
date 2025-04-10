@@ -133,6 +133,8 @@ to allow visualization of [pyjanitor](https://github.com/pyjanitor-devs/pyjanito
 - **register_dataframe_accessor**: register an accessor (and it's methods) with a pandas DataFrame.
 - **register_series_method**: register a methods directly with a pandas Series.
 - **register_series_accessor**: register an accessor (and it's methods) with a pandas Series.
+- **register_groupby_method**: register a methods directly with a pandas DataFrameGroupBy object.
+- **register_groupby_accessor**: register an accessor (and it's methods) with a pandas DataFrameGroupBy object.
 
 ## Installation
 
