@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import warnings
 from functools import wraps
-from typing import Callable
 
 from pandas.core.groupby.generic import DataFrameGroupBy
 from pandas.util._exceptions import find_stack_level
@@ -286,9 +285,9 @@ class CachedAccessor:
         return accessor_obj
 
 
-def _register_accessor(name: str, cls: DataFrameGroupBy) -> Callable:
+def _register_accessor(name: str, cls: DataFrameGroupBy):
     """
-    Register a custom accessor on DataFrameGroupBy objects.
+    Register a custom accessor on a DataFrameGroupBy object.
 
     Args:
         name : str
@@ -324,7 +323,7 @@ def register_groupby_accessor(name: str):
     return _register_accessor(name, DataFrameGroupBy)
 
 
-def register_groupby_method(method: Callable):
+def register_groupby_method(method):
     """Register a function as a method attached to the pandas DataFrameGroupBy.
 
     Example:
