@@ -17,7 +17,7 @@ repos:
   rev: 1.5.0
   hooks:
   - id: interrogate
-    args: [-c, pyproject.toml, -vv]
+    args: [-c, pyproject.toml, -vv, --fail-under=70]
 - repo: https://github.com/terrencepreilly/darglint
   rev: v1.8.1
   hooks:
