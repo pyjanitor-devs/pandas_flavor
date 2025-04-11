@@ -14,3 +14,4 @@ dependencies:
   - build # for building package distributions
   - pip:
       - tuna
+  - setuptools==70.3.0
