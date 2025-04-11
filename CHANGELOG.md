@@ -1,7 +1,7 @@
 # Changelog
 
 ## [Unreleased]
-
+-   [ENH] Add pandas groupby accessor and method. (@samukweku)
 ## [v0.6.0] - 2023-07-08
 
 ## [v0.5.0] - 2023-02-03

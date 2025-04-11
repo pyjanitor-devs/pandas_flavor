@@ -16,6 +16,11 @@ on:
       version_name:
         description: "One of major, minor, or patch"
         required: true
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
 
 jobs:
   release:
@@ -86,7 +91,8 @@ jobs:
       - name: Build package
         run: |
           rm -f dist/*
-          python setup.py sdist bdist_wheel
+          pip install build
+          python -m build
 
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@master
