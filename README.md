@@ -61,7 +61,7 @@ df = pd.DataFrame(data={
 # Print DataFrame
 print(df)
 
-# x  y
+#    x   y
 # 0  10  0
 # 1  20  2
 # 2  25  5
