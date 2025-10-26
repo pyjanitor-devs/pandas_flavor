@@ -2,7 +2,7 @@
 
 import pandas_flavor as pf
 import pandas as pd
-from pandas.core.groupby.generic import DataFrameGroupBy
+from pandas.core.groupby.generic import DataFrameGroupBy, SeriesGroupBy
 
 
 def test_register_dataframe_method():
@@ -43,10 +43,10 @@ def test_register_series_method():
     ser.dummy_func()
 
 
-def test_register_groupby_method():
-    """Test register_groupby_method."""
+def test_register_df_groupby_method():
+    """Test register_dataframe_groupby_method."""
 
-    @pf.register_groupby_method
+    @pf.register_dataframe_groupby_method
     def dummy_func(by: DataFrameGroupBy) -> DataFrameGroupBy:
         """Dummy func.
 
@@ -65,4 +65,28 @@ def test_register_groupby_method():
         }
     )
     by = df.groupby("Animal")
+    by.dummy_func()
+
+
+def test_register_ser_groupby_method():
+    """Test register_series_groupby_method."""
+
+    @pf.register_series_groupby_method
+    def dummy_func(by: SeriesGroupBy) -> SeriesGroupBy:
+        """Dummy func.
+
+        Args:
+            by: A SeriesGroupBy object.
+
+        Returns:
+            SeriesGroupBy.
+        """
+        return by
+
+    df = pd.Series(
+        {
+            "Animal": ["Falcon"],
+        }
+    )
+    by = df.groupby([0])
     by.dummy_func()
