@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+- rename register_groupby_method to register_dataframe_groupby_method. Added register_series_groupby_method. @samukweku
 
 ## [v0.7.0] - 2025-04-11
 

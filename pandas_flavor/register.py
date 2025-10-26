@@ -336,7 +336,7 @@ def register_dataframe_groupby_method(method):
         ...    '''Print the dataframe column given''' # doctest: +SKIP
         ...    print(grp[col]) # doctest: +SKIP
 
-    !!! info "New in version 0.7.0"
+    !!! info "New in version 0.8.0"
 
     Args:
         method: Function to be registered as a method
