@@ -1,4 +1,5 @@
 """XArray support for pandas_flavor."""
+
 from xarray import register_dataarray_accessor, register_dataset_accessor
 from functools import wraps
 
