@@ -7,11 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Run test suite
 
-    # https://github.com/marketplace/actions/setup-miniconda#use-a-default-shell
-    defaults:
-      run:
-        shell: bash -l {0}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
