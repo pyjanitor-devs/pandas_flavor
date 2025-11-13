@@ -1,0 +1,17 @@
+# Run code style checks on each pull request.
+name: Code style checks
+
+on: [pull_request]
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup uv
+        id: setup-uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Run pre-commit
+        run: uvx pre-commit run --all-files

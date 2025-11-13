@@ -1,8 +1,9 @@
 """Tests for pandas series and dataframe method registration."""
 
-import pandas_flavor as pf
 import pandas as pd
 from pandas.core.groupby.generic import DataFrameGroupBy, SeriesGroupBy
+
+import pandas_flavor as pf
 
 
 def test_register_dataframe_method():

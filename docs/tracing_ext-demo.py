@@ -1,4 +1,5 @@
 """Tracing extension demo."""
+
 import time
 
 import pandas as pd
@@ -38,7 +39,10 @@ def another_method(df: pd.DataFrame, new_col_d) -> pd.DataFrame:
 
 
 class tracer:
-    """A simple tracer for method calls."""
+    """A simple tracer for method calls.
+
+    Initialize the tracer.
+    """
 
     @staticmethod
     def create_tracer(*args):
@@ -53,7 +57,6 @@ class tracer:
         return tracer()
 
     def __init__(self):
-        """Initialize the tracer."""
         self.method_name = None
         self.start_ts = None
         self.end_ts = None

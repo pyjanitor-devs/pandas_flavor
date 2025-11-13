@@ -1,30 +1,38 @@
-# See https://pre-commit.com for more information
-# See https://pre-commit.com/hooks.html for more hooks
 repos:
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.4.0
-  hooks:
-  - id: trailing-whitespace
-  - id: end-of-file-fixer
-  - id: check-yaml
-  - id: check-added-large-files
-- repo: https://github.com/psf/black
-  rev: 23.1.0
-  hooks:
-  - id: black
-    args: [--config, pyproject.toml]
-- repo: https://github.com/econchick/interrogate
-  rev: 1.5.0
-  hooks:
-  - id: interrogate
-    args: [-c, pyproject.toml, -vv]
-- repo: https://github.com/terrencepreilly/darglint
-  rev: v1.8.1
-  hooks:
-  - id: darglint
-    args: [-v 2]  # this config makes the error messages a bit less cryptic.
-- repo: https://github.com/PyCQA/flake8
-  rev: 6.0.0
-  hooks:
-    - id: flake8
-      args: [--exclude, nbconvert_config.py]
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.8.1
+    hooks:
+      - id: nbstripout
+  - repo: https://github.com/econchick/interrogate
+    rev: 1.7.0
+    hooks:
+      - id: interrogate
+        args: [-c, pyproject.toml]
+  - repo: https://github.com/jsh9/pydoclint
+    rev: 0.8.1
+    hooks:
+      - id: pydoclint
+        args:
+          - "--config=pyproject.toml"
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.14.4
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix, --exclude, nbconvert_config.py]
+      - id: ruff-format
+  - repo: local
+    hooks:
+      - id: pixi-install
+        name: Keep lockfile up-to-date
+        entry: pixi install
+        language: system
+        always_run: true
+        require_serial: true
+        pass_filenames: false

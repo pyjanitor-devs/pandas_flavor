@@ -1,6 +1,8 @@
 """XArray support for pandas_flavor."""
-from xarray import register_dataarray_accessor, register_dataset_accessor
+
 from functools import wraps
+
+from xarray import register_dataarray_accessor, register_dataset_accessor
 
 
 def make_accessor_wrapper(method):
@@ -16,14 +18,13 @@ def make_accessor_wrapper(method):
     """
 
     class XRAccessor:
-        """XArray accessor for a method."""
+        """XArray accessor for a method.
+
+        Args:
+            xr_obj: The XArray object to which the accessor is attached.
+        """
 
         def __init__(self, xr_obj):
-            """Initialize the accessor.
-
-            Args:
-                xr_obj: The XArray object to which the accessor is attached.
-            """
             self._xr_obj = xr_obj
 
         @wraps(method)
