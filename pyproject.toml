@@ -1,9 +1,158 @@
+# https://setuptools.pypa.io/en/latest/userguide/quickstart.html
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [tool.black]
-line-length = 79
+line-length = 88
 target-version = ['py39']
 include = '\.pyi?$'
-extend-exclude = '''
-# A regex preceded with ^/ will apply only to files and directories
-# in the root of the project.
-^/foo.py  # exclude a file named foo.py in the root of the project (in addition to the defaults)
+exclude = '''
+
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+  | foo.py           # also separately exclude a file named foo.py in
+                     # the root of the project
+)
 '''
+
+[tool.interrogate]
+ignore-init-method = true
+ignore-init-module = false
+ignore-magic = false
+ignore-semiprivate = false
+ignore-private = false
+ignore-property-decorators = false
+ignore-module = false
+fail-under = 100
+exclude = ["setup.py", "docs", "build", "examples"]
+ignore-regex = ["^get$", "^mock_.*", ".*BaseClass.*"]
+verbose = 2
+quiet = false
+whitelist-regex = []
+color = true
+
+[tool.pytest.ini_options]
+addopts = "-v --cov --cov-report term-missing"
+testpaths = [
+    "tests",
+]
+
+[tool.isort]
+profile = "black"
+
+[tool.ruff]
+# See https://docs.astral.sh/ruff/rules/ for a list of rules.
+# See https://docs.astral.sh/ruff/configuration/#using-pyprojecttoml for configuration documentation
+lint.select = ["E", "F", "I"]
+
+[tool.pydoclint]
+style = 'sphinx'
+exclude = '\.git|\.tox|tests/data'
+require-return-section-when-returning-nothing = false
+arg-type-hints-in-docstring = false
+check-return-types = false
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+namespaces = false
+
+[project]
+name = "pandas-flavor"
+version = "0.7.0"
+description = "The easy way to write your own Pandas flavor"
+requires-python = ">=3.9"
+dependencies = [
+    "pandas>=0.23",
+    "xarray",
+]
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Zach Sailer", email = "zachsailer@gmail.com"},
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+[project.urls]
+Homepage = "https://github.com/pyjanitor-devs/pandas_flavor"
+Repository = "https://github.com/pyjanitor-devs/pandas_flavor"
+Issues = "https://github.com/pyjanitor-devs/pandas_flavor/issues"
+
+[tool.coverage.run]
+omit = [
+    "tests/*",
+]
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["osx-arm64", "linux-64"]
+
+[tool.pixi.pypi-dependencies]
+pandas-flavor = { path = ".", editable = true }
+
+# NOTE: Core dependencies (needed for running the program) go here.
+[tool.pixi.dependencies]
+
+# NOTE: Testing dependencies (not needed for running program) go here.
+[tool.pixi.feature.tests.dependencies]
+pytest = "*"
+pytest-cov = "*"
+hypothesis = "*"
+
+# NOTE: Docs dependencies (needed for documentation and notebooks) go here.
+[tool.pixi.feature.docs.dependencies]
+mkdocs = "*"
+mkdocs-material = "*"
+mknotebooks = "*"
+
+[tool.pixi.feature.notebook.dependencies]
+ipykernel = "*"
+ipython = "*"
+jupyter = "*"
+pixi-kernel = "*"
+
+[tool.pixi.feature.devtools.dependencies]
+pre-commit = "*"
+
+[tool.pixi.feature.tests.tasks]
+test = "pytest"
+
+[tool.pixi.feature.devtools.tasks]
+lint = "pre-commit run --all-files"
+commit = "git commit"
+
+[tool.pixi.feature.docs.tasks]
+build-docs = "mkdocs build"
+serve-docs = "mkdocs serve"
+
+[tool.pixi.feature.setup.tasks]
+setup = "pre-commit autoupdate && pre-commit install --install-hooks"
+update = "pre-commit autoupdate"
+
+[tool.pixi.environments]
+default = { features = ["tests", "devtools", "notebook", "setup"] }
+docs = { features = ["docs"] }
+tests = { features = ["tests", "setup"] }

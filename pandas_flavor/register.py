@@ -2,16 +2,16 @@
 
 from __future__ import annotations
 
+import inspect
 import warnings
 from functools import wraps
 
-from pandas.core.groupby.generic import DataFrameGroupBy
-from pandas.util._exceptions import find_stack_level
 from pandas.api.extensions import (
-    register_series_accessor,
     register_dataframe_accessor,
+    register_series_accessor,
 )
-import inspect
+from pandas.core.groupby.generic import DataFrameGroupBy, SeriesGroupBy
+from pandas.util._exceptions import find_stack_level
 
 method_call_ctx_factory = None
 
@@ -80,9 +80,7 @@ def handle_pandas_extension_call(method, method_signature, obj, args, kwargs):
     """  # noqa: E501
 
     global method_call_ctx_factory
-    with method_call_ctx_factory(
-        method.__name__, args, kwargs
-    ) as method_call_ctx:
+    with method_call_ctx_factory(method.__name__, args, kwargs) as method_call_ctx:
         if method_call_ctx is None:  # nullcontext __enter__ returns None
             ret = method(obj, *args, **kwargs)
         else:
@@ -137,14 +135,13 @@ def register_dataframe_method(method):
         """
 
         class AccessorMethod(object):
-            """DataFrame Accessor method class."""
+            """DataFrame Accessor method class.
+
+            Args:
+                pandas_obj (pandas.DataFrame): The pandas DataFrame object.
+            """
 
             def __init__(self, pandas_obj):
-                """Initialize the accessor method class.
-
-                Args:
-                    pandas_obj (pandas.DataFrame): The pandas DataFrame object.
-                """
                 self._obj = pandas_obj
 
             @wraps(method)
@@ -198,16 +195,15 @@ def register_series_method(method):
         """
 
         class AccessorMethod(object):
-            """Series Accessor method class."""
+            """Series Accessor method class.
+
+            Args:
+                pandas_obj (pandas.Series): The pandas Series object.
+            """
 
             __doc__ = method.__doc__
 
             def __init__(self, pandas_obj):
-                """Initialize the accessor method class.
-
-                Args:
-                    pandas_obj (pandas.Series): The pandas Series object.
-                """
                 self._obj = pandas_obj
 
             @wraps(method)
@@ -273,6 +269,15 @@ class CachedAccessor:
         self._accessor = accessor
 
     def __get__(self, obj, cls):
+        """Get the accessor object.
+
+        Args:
+            obj: The object instance.
+            cls: The class.
+
+        Returns:
+            The accessor object.
+        """
         if obj is None:
             # we're accessing the attribute of the class, i.e., Dataset.geo
             return self._accessor
@@ -285,22 +290,30 @@ class CachedAccessor:
         return accessor_obj
 
 
-def _register_accessor(name: str, cls: DataFrameGroupBy):
+def _register_accessor(name: str, cls: DataFrameGroupBy | SeriesGroupBy):
     """
-    Register a custom accessor on a DataFrameGroupBy object.
+    Register a custom accessor on a pandas GroupBy object.
 
     Args:
         name : str
             Name under which the accessor should be registered.
             A warning is issued
             if this name conflicts with a preexisting attribute.
-        cls: DataFrameGroupBy
+        cls: DataFrameGroupBy|SeriesGroupBy
 
     Returns:
         A class decorator.
     """
 
     def decorator(accessor):
+        """Register the accessor on the class.
+
+        Args:
+            accessor: The accessor class to register.
+
+        Returns:
+            The accessor class.
+        """
         if hasattr(cls, name):
             warnings.warn(
                 f"registration of accessor {repr(accessor)} under name "
@@ -319,20 +332,40 @@ def _register_accessor(name: str, cls: DataFrameGroupBy):
     return decorator
 
 
-def register_groupby_accessor(name: str):
+def register_dataframe_groupby_accessor(name: str):
+    """Register a custom accessor on a pandas DataFrameGroupBy object.
+
+    Args:
+        name: Name under which the accessor should be registered.
+
+    Returns:
+        A class decorator.
+    """
     return _register_accessor(name, DataFrameGroupBy)
 
 
-def register_groupby_method(method):
+def register_series_groupby_accessor(name: str):
+    """Register a custom accessor on a pandas SeriesGroupBy object.
+
+    Args:
+        name: Name under which the accessor should be registered.
+
+    Returns:
+        A class decorator.
+    """
+    return _register_accessor(name, SeriesGroupBy)
+
+
+def register_dataframe_groupby_method(method):
     """Register a function as a method attached to the pandas DataFrameGroupBy.
 
     Example:
-        >>> @register_groupby_method # doctest: +SKIP
+        >>> @register_dataframe_groupby_method # doctest: +SKIP
         >>> def print_column(grp, col): # doctest: +SKIP
         ...    '''Print the dataframe column given''' # doctest: +SKIP
         ...    print(grp[col]) # doctest: +SKIP
 
-    !!! info "New in version 0.7.0"
+    !!! info "New in version 0.8.0"
 
     Args:
         method: Function to be registered as a method
@@ -347,7 +380,7 @@ def register_groupby_method(method):
         """Inner function to register the method.
 
         This function is called when the user
-        decorates a function with register_groupby_method.
+        decorates a function with register_dataframe_groupby_method.
 
         Args:
             *args: The arguments to pass to the registered method.
@@ -358,16 +391,15 @@ def register_groupby_method(method):
         """
 
         class AccessorMethod(object):
-            """DataFrameGroupBy Accessor method class."""
+            """DataFrameGroupBy Accessor method class.
+
+            Args:
+                obj: The pandas DataFrameGroupBy object.
+            """
 
             __doc__ = method.__doc__
 
             def __init__(self, obj):
-                """Initialize the accessor method class.
-
-                Args:
-                    obj: The pandas DataFrameGroupBy object.
-                """
                 self._obj = obj
 
             @wraps(method)
@@ -390,7 +422,79 @@ def register_groupby_method(method):
                     method, method_signature, self._obj, args, kwargs
                 )
 
-        register_groupby_accessor(method.__name__)(AccessorMethod)
+        register_dataframe_groupby_accessor(method.__name__)(AccessorMethod)
+        return method
+
+    return inner()
+
+
+def register_series_groupby_method(method):
+    """Register a function as a method attached to the pandas SeriesGroupBy.
+
+    Example:
+        >>> @register_series_groupby_method # doctest: +SKIP
+        >>> def print_column(grp, col): # doctest: +SKIP
+        ...    '''Print the dataframe column given''' # doctest: +SKIP
+        ...    print(grp[col]) # doctest: +SKIP
+
+    !!! info "New in version 0.8.0"
+
+    Args:
+        method: Function to be registered as a method
+            on the SeriesGroupBy object.
+
+    Returns:
+        callable: The original method.
+    """
+    method_signature = inspect.signature(method)
+
+    def inner(*args: tuple, **kwargs: dict):
+        """Inner function to register the method.
+
+        This function is called when the user
+        decorates a function with register_series_groupby_method.
+
+        Args:
+            *args: The arguments to pass to the registered method.
+            **kwargs: The keyword arguments to pass to the registered method.
+
+        Returns:
+            method: The original method.
+        """
+
+        class AccessorMethod(object):
+            """SeriesGroupBy Accessor method class.
+
+            Args:
+                obj: The pandas SeriesGroupBy object.
+            """
+
+            __doc__ = method.__doc__
+
+            def __init__(self, obj):
+                self._obj = obj
+
+            @wraps(method)
+            def __call__(self, *args, **kwargs):
+                """Call the accessor method.
+
+                Args:
+                    *args: The arguments to pass to the registered method.
+                    **kwargs: The keyword arguments to pass
+                        to the registered method.
+
+                Returns:
+                    object: The result of calling of the method.
+                """
+                global method_call_ctx_factory
+                if method_call_ctx_factory is None:
+                    return method(self._obj, *args, **kwargs)
+
+                return handle_pandas_extension_call(
+                    method, method_signature, self._obj, args, kwargs
+                )
+
+        register_series_groupby_accessor(method.__name__)(AccessorMethod)
         return method
 
     return inner()

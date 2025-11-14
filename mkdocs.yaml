@@ -1,0 +1,50 @@
+site_name: "Pandas Flavor"
+site_url: https://pyjanitor-devs.github.io/pandas_flavor
+
+docs_dir: docs/
+
+# For more configuration on the theme, see https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/
+theme:
+  name: material
+  icon:
+    logo: "fontawesome/solid/book"
+  features:
+    - instant
+    - tabs
+  language: en
+
+# We customize the navigation by hand to control the order
+# in which pages show up.
+
+plugins:
+  - search
+  - mknotebooks:
+      execute: true
+      write_markdown: true
+      allow_errors: false
+      timeout: 1200
+      binder: true
+      binder_service_name: "gh"
+      binder_branch: "master"
+      binder_ui: "lab"
+
+# Taken from here: https://squidfunk.github.io/mkdocs-material/extensions/codehilite/
+markdown_extensions:
+  - codehilite
+  - admonition
+  - pymdownx.superfences
+  - markdown.extensions.attr_list
+
+extra_css:
+  - apidocs.css
+
+extra_javascript:
+  - config.js
+
+repo_name: "pyjanitor-devs/pandas_flavor"
+repo_url: "https://github.com/pyjanitor-devs/pandas_flavor"
+
+extra:
+  social:
+    - icon: "fontawesome/brands/github"
+      link: "https://github.com/pyjanitor-devs"
