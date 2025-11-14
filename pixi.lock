@@ -2786,7 +2786,7 @@ packages:
 - pypi: ./
   name: pandas-flavor
   version: 0.7.0
-  sha256: 910eae5f557d8daf2547f0db32b5ed9741bbf355e047f61ea3c3c9124b1d634a
+  sha256: 3e98a6ce8319a18f2fd4076467d1de14aff8a6c9a4349e6ac84621eed7d7612f
   requires_dist:
   - pandas>=0.23
   - xarray
