@@ -68,7 +68,7 @@ jobs:
 
       # See https://github.com/thomaseizinger/keep-a-changelog-new-release
       - name: Update Changelog
-        uses: thomaseizinger/keep-a-changelog-new-release@v1
+        uses: thomaseizinger/keep-a-changelog-new-release@v3
         with:
           version: v${{ env.version_number }}
 
